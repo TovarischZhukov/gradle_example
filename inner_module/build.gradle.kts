@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.4.31"
     `kotlin-dsl`
     application
+    id("ru.mail.my-plugin")  apply true
 }
 
 val myFirstTask: TaskProvider<Task> by tasks.registering {
@@ -23,17 +24,23 @@ val myFirstTask2: TaskProvider<Task> by tasks.registering {
 
 tasks.named("myFirstTask").configure {
     doLast {
-        println("Hello, Gradle 3!")
+        println("Hello, Gradle extended!")
     }
 }
 
 task<Copy>("copyTask") {
-    from ("path1")
-    into("path2")
+    from ("src/main/java")
+    into("src/test/java")
+}
+
+task<Delete>("deleteTask") {
+    delete("src/test/java/gradle")
 }
 
 tasks.register<JavaExec>("startMainClass") {
     group = "launch"
+
     mainClass.set( "gradle.example.Main")
+
     classpath = sourceSets["main"].runtimeClasspath
 }
